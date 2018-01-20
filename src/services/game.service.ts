@@ -25,7 +25,11 @@ export class GameService {
   create() {
     this.game.physics.startSystem(Physics.ARCADE);
 
-    const background = this.game.add.sprite(0, 0, 'background');
+    const background = this.game.add.sprite(
+      window.innerWidth,
+      window.innerWidth,
+      'background',
+    );
     // Platforms
     this.platforms = this.game.add.group();
     this.platforms.enableBody = true;
