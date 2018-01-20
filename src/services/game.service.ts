@@ -3,8 +3,8 @@ import { AUTO, Game, Physics } from 'phaser-ce/build/custom/phaser-split';
 
 @Injectable()
 export class GameService {
-  // Collidables
-  collidables: any[] = [];
+  // Collidables that were registered before the game init
+  entryColliders: any[] = [];
   // Game
   game: Game;
   platforms: any;
@@ -33,12 +33,6 @@ export class GameService {
     // Platforms
     this.platforms = this.game.add.group();
     this.platforms.enableBody = true;
-    this.collidables.forEach(({ x, y, width, height }: any) => {
-      const obj = this.platforms.create(x, y, 'player');
-      obj.width = width;
-      obj.height = height;
-      obj.body.immovable = true;
-    });
     // Plater
     this.player = this.game.add.sprite(32, 150, 'player');
     this.game.physics.arcade.enable(this.player);
@@ -76,6 +70,19 @@ export class GameService {
   }
 
   registerCollidable(data: any) {
-    this.collidables.push(data);
+    return this.createCollidable(data);
+  }
+
+  createCollidable({ name, x, y, width, height }: any) {
+    const obj = this.platforms.create(x, y, 'player');
+    obj.name = name;
+    obj.width = width;
+    obj.height = height;
+    obj.body.immovable = true;
+    return obj;
+  }
+
+  removeCollider(collider: any) {
+    this.platforms.removeChild(collider);
   }
 }

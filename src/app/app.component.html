@@ -1,12 +1,9 @@
 <div #page class="content">
-  <router-outlet></router-outlet>
-  <div style="margin-top: 300px;margin-left: 200px;">
-    <span collide>
-      Caleb Froese
-    </span>
-  </div>
-  <div class="routes">
-    <a routerLink="/">Home</a>
-    <a routerLink="/portfolio">Portfolio</a>
-  </div>
+  <ng-container *ngIf="loaded">
+    <router-outlet></router-outlet>
+    <div class="routes">
+      <a routerLink="/">Home</a>
+      <a routerLink="/portfolio">Portfolio</a>
+    </div>
+  </ng-container>
 </div>

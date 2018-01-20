@@ -7,7 +7,7 @@ import {
 } from '@angular/animations';
 
 export function routerTransition() {
-  return slideToLeft();
+  return slideToTop();
 }
 
 function slideToRight() {
