@@ -1,16 +1,12 @@
 :host() {
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
+  height: 100%;
+  width: 100%;
 
-  .toolbar {
-    height: 100%;
-  }
-
-  .content {
-    padding: 10vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
+  .content, canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
   }
 }
