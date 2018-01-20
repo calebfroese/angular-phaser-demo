@@ -10,10 +10,10 @@ export class GameService {
   platforms: any;
   player: any;
 
-  init(width, height) {
+  init(width, height, callback) {
     this.game = new Game(width, height, AUTO, 'content', {
       preload: phaser => this.preload.call(this),
-      create: phaser => this.create.call(this),
+      create: phaser => this.create.call(this, callback),
       update: phaser => this.update.call(this),
     });
   }
@@ -22,7 +22,7 @@ export class GameService {
     this.game.load.image('player', 'favicon.ico');
   }
 
-  create() {
+  create(callback) {
     this.game.physics.startSystem(Physics.ARCADE);
 
     const background = this.game.add.sprite(
@@ -39,6 +39,8 @@ export class GameService {
     this.player.body.gravity.y = 2000;
     this.player.body.collideWorldBounds = true;
     this.game.stage.backgroundColor = 0xeeeeee;
+
+    callback();
   }
 
   update() {

@@ -15,9 +15,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     const { offsetWidth, offsetHeight } = this.page.nativeElement;
-    this.service.init(offsetWidth, offsetHeight);
-    setInterval(() => {
-      this.loaded = !!this.service.platforms;
-    }, 1000);
+    this.service.init(offsetWidth, offsetHeight, () => (this.loaded = true));
   }
 }
