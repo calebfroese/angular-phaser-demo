@@ -38,7 +38,7 @@ export class GameService {
     // Plater
     this.player = this.game.add.sprite(32, 150, 'player');
     this.game.physics.arcade.enable(this.player);
-    this.player.body.gravity.y = 2000;
+    this.player.body.gravity.y = 1000;
     this.player.body.collideWorldBounds = true;
     this.game.stage.backgroundColor = 0xeeeeee;
 
@@ -51,6 +51,8 @@ export class GameService {
       this.player,
       this.platforms,
     );
+    // console.log(this.platforms.children.length);
+    // console.log('hitplatform', hitPlatform);
     const cursors = this.game.input.keyboard.createCursorKeys();
     this.player.body.velocity.x = 0;
     const PLAYER_SPEED = 750;
@@ -72,13 +74,14 @@ export class GameService {
       this.player.body.velocity.y = -PLAYER_JUMP;
     }
 
-    if (!this.transitioning && this.player.y >= 0) {
+    if (!this.transitioning && this.player.y >= 1500) {
+      // End transition and player no longer offscreen
+      this.player.y = -50;
+      this.player.body.velocity.y = 0;
+      this.player.x = 100;
+    } else if (!this.transitioning && this.player.y > 0) {
       // End transition and player no longer offscreen
       this.player.body.collideWorldBounds = true;
-    } else if (this.player.y > 1440) {
-      // End transition
-      this.player.y = -50;
-      this.player.x = 100;
     } else if (this.transitioning) {
       // Start transition
       this.player.body.collideWorldBounds = false;
@@ -100,5 +103,10 @@ export class GameService {
 
   removeCollider(collider: any) {
     this.platforms.removeChild(collider);
+  }
+
+  removeAllColliders() {
+    this.platforms.removeChildren();
+    console.log(this.platforms.children.length);
   }
 }

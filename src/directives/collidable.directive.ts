@@ -1,19 +1,22 @@
-import { Directive, ElementRef, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, OnInit } from '@angular/core';
 
 import { GameService } from '../services/game.service';
 
 @Directive({
   selector: '[collide]',
 })
-export class CollidableDirective implements OnDestroy {
+export class CollidableDirective implements OnInit, OnDestroy {
   // Reference to the collider game object
   obj: any;
+  exists: boolean;
 
   constructor(public service: GameService, private el: ElementRef) {}
 
-  transitionLevel() {}
+  destroy() {
+    this.service.removeCollider(this.obj);
+  }
 
-  transitionEnd() {
+  create() {
     const {
       left: x,
       top: y,
@@ -23,7 +26,9 @@ export class CollidableDirective implements OnDestroy {
     this.obj = this.service.registerCollidable({ x, y: y, width, height });
   }
 
+  ngOnInit() {}
+
   ngOnDestroy() {
-    this.service.removeCollider(this.obj);
+    this.exists = false;
   }
 }

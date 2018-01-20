@@ -3,33 +3,32 @@ import {
   ViewChildren,
   HostListener,
   OnInit,
+  OnDestroy,
   Component,
 } from '@angular/core';
 
-import { routerTransition } from '../animations';
+import { animations } from '../animations';
 import { GameService } from '../services/game.service';
 import { CollidableDirective } from '../directives/collidable.directive';
 
 @Component({
   selector: 'cf-home',
-  animations: [routerTransition()],
+  animations: animations(),
   templateUrl: './home.component.html',
   host: {
     '[@routerTransition]': '',
+    '[@enter]': '',
+    '[@leave]': '',
   },
 })
-export class HomeComponent implements OnInit {
-  @HostListener('@routerTransition.start')
+export class HomeComponent implements OnInit, OnDestroy {
+  destroying: boolean;
+  @HostListener('@enter.done')
   animStart() {
-    this.service.transitioning = true;
-    if (this.collidables.length)
-    this.collidables.forEach(collidable => collidable.transitionLevel());
-  }
-  @HostListener('@routerTransition.done')
-  animDone() {
+    if (this.destroying) return;
     this.service.transitioning = false;
     if (this.collidables.length)
-      this.collidables.forEach(collidable => collidable.transitionEnd());
+      this.collidables.forEach(collidable => collidable.create());
   }
   @ViewChildren(CollidableDirective)
   collidables: QueryList<CollidableDirective>;
@@ -37,4 +36,10 @@ export class HomeComponent implements OnInit {
   constructor(public service: GameService) {}
 
   ngOnInit() {}
+  ngOnDestroy() {
+    this.service.transitioning = true;
+    this.destroying = true;
+    if (this.collidables.length)
+      this.collidables.forEach(collidable => collidable.destroy());
+  }
 }
