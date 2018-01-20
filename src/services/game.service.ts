@@ -51,10 +51,12 @@ export class GameService {
     );
     const cursors = this.game.input.keyboard.createCursorKeys();
     this.player.body.velocity.x = 0;
+    const PLAYER_SPEED = 750;
+    const PLAYER_JUMP = 1000;
     if (cursors.left.isDown) {
-      this.player.body.velocity.x = -150;
+      this.player.body.velocity.x = -PLAYER_SPEED;
     } else if (cursors.right.isDown) {
-      this.player.body.velocity.x = 150;
+      this.player.body.velocity.x = PLAYER_SPEED;
     } else {
       this.player.animations.stop();
       this.player.frame = 4;
@@ -65,7 +67,7 @@ export class GameService {
       this.player.y >= this.game.world.height - this.player.body.height;
     const isOnPlatform = this.player.body.touching.down && hitPlatform;
     if (cursors.up.isDown && (isOnGround || isOnPlatform)) {
-      this.player.body.velocity.y = -1000;
+      this.player.body.velocity.y = -PLAYER_JUMP;
     }
   }
 
