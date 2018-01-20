@@ -21,11 +21,13 @@ import { CollidableDirective } from '../directives/collidable.directive';
 export class HomeComponent implements OnInit {
   @HostListener('@routerTransition.start')
   animStart() {
+    this.service.transitioning = true;
     if (this.collidables.length)
-      this.collidables.forEach(collidable => collidable.transitionLevel());
+    this.collidables.forEach(collidable => collidable.transitionLevel());
   }
   @HostListener('@routerTransition.done')
   animDone() {
+    this.service.transitioning = false;
     if (this.collidables.length)
       this.collidables.forEach(collidable => collidable.transitionEnd());
   }

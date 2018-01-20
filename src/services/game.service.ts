@@ -10,6 +10,8 @@ export class GameService {
   platforms: any;
   player: any;
 
+  public transitioning: boolean;
+
   init(width, height, callback) {
     this.game = new Game(width, height, AUTO, 'content', {
       preload: phaser => this.preload.call(this),
@@ -68,6 +70,18 @@ export class GameService {
     const isOnPlatform = this.player.body.touching.down && hitPlatform;
     if (cursors.up.isDown && (isOnGround || isOnPlatform)) {
       this.player.body.velocity.y = -PLAYER_JUMP;
+    }
+
+    if (!this.transitioning && this.player.y >= 0) {
+      // End transition and player no longer offscreen
+      this.player.body.collideWorldBounds = true;
+    } else if (this.player.y > 1440) {
+      // End transition
+      this.player.y = -50;
+      this.player.x = 100;
+    } else if (this.transitioning) {
+      // Start transition
+      this.player.body.collideWorldBounds = false;
     }
   }
 
