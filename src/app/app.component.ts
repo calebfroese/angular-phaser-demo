@@ -1,4 +1,10 @@
-import { OnInit, ElementRef, ViewChild, Component } from '@angular/core';
+import {
+  ViewContainerRef,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  Component,
+} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,22 +12,26 @@ import { OnInit, ElementRef, ViewChild, Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  @ViewChild('canvas') canvas: ElementRef;
+  ctx: CanvasRenderingContext2D;
+  canvas: HTMLCanvasElement;
+  player: any;
+
+  @ViewChild('page') page: ElementRef;
+  @ViewChild('canvas') canvasEl: ElementRef;
   @ViewChild('title') title: ElementRef;
   @ViewChild('subtitle') subtitle: ElementRef;
 
   ngOnInit() {
     // Setup the canvas
-    const el: HTMLCanvasElement = this.canvas.nativeElement;
-    el.width = 2560;
-    el.height = 1440;
-    const ctx = el.getContext('2d');
+    this.canvas = this.canvasEl.nativeElement;
+    this.canvas.width = this.page.nativeElement.offsetWidth;
+    this.canvas.height = this.page.nativeElement.offsetHeight;
+    this.ctx = this.canvas.getContext('2d');
 
-    // Outline elements
-    const title: HTMLHeadElement = this.title.nativeElement;
-    const subtitle: HTMLHeadElement = this.subtitle.nativeElement;
-    this.drawRect(ctx, title);
-    this.drawRect(ctx, subtitle);
+    const FPS = 30;
+    setInterval(() => {
+      this.redraw();
+    }, FPS);
   }
 
   drawRect(ctx: CanvasRenderingContext2D, element: HTMLElement) {
@@ -31,5 +41,15 @@ export class AppComponent implements OnInit {
     const height = element.offsetHeight;
     ctx.rect(x, y, width, height);
     ctx.stroke();
+  }
+
+  redraw() {
+    this.ctx.clearRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+
+    // Outline elements
+    const title: HTMLHeadElement = this.title.nativeElement;
+    const subtitle: HTMLHeadElement = this.subtitle.nativeElement;
+    this.drawRect(this.ctx, title);
+    this.drawRect(this.ctx, subtitle);
   }
 }
