@@ -23,7 +23,7 @@ export class CollidableDirective implements OnInit, OnDestroy {
       width,
       height,
     } = this.el.nativeElement.getBoundingClientRect();
-    this.obj = this.service.registerCollidable({ x, y: y, width, height });
+    this.obj = this.service.createCollidable({ x, y: y, width, height });
   }
 
   ngOnInit() {}

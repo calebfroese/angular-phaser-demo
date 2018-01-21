@@ -3,8 +3,6 @@ import { AUTO, Game, Physics } from 'phaser-ce/build/custom/phaser-split';
 
 @Injectable()
 export class GameService {
-  // Collidables that were registered before the game init
-  entryColliders: any[] = [];
   // Game
   game: Game;
   platforms: any;
@@ -51,8 +49,6 @@ export class GameService {
       this.player,
       this.platforms,
     );
-    // console.log(this.platforms.children.length);
-    // console.log('hitplatform', hitPlatform);
     const cursors = this.game.input.keyboard.createCursorKeys();
     this.player.body.velocity.x = 0;
     const PLAYER_SPEED = 750;
@@ -88,10 +84,6 @@ export class GameService {
     }
   }
 
-  registerCollidable(data: any) {
-    return this.createCollidable(data);
-  }
-
   createCollidable({ name, x, y, width, height }: any) {
     const obj = this.platforms.create(x, y, 'player');
     obj.name = name;
@@ -103,10 +95,5 @@ export class GameService {
 
   removeCollider(collider: any) {
     this.platforms.removeChild(collider);
-  }
-
-  removeAllColliders() {
-    this.platforms.removeChildren();
-    console.log(this.platforms.children.length);
   }
 }
