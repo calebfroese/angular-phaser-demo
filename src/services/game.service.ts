@@ -11,11 +11,19 @@ export class GameService {
   public transitioning: boolean;
 
   init(width, height, callback) {
-    this.game = new Game(width, height, AUTO, 'content', {
-      preload: phaser => this.preload.call(this),
-      create: phaser => this.create.call(this, callback),
-      update: phaser => this.update.call(this),
-    });
+    this.game = new Game(
+      width,
+      height,
+      AUTO,
+      'content',
+      {
+        transparent: true,
+        preload: phaser => this.preload.call(this),
+        create: phaser => this.create.call(this, callback),
+        update: phaser => this.update.call(this),
+      },
+      true,
+    );
   }
 
   preload() {
@@ -38,7 +46,6 @@ export class GameService {
     this.game.physics.arcade.enable(this.player);
     this.player.body.gravity.y = 1000;
     this.player.body.collideWorldBounds = true;
-    this.game.stage.backgroundColor = 0xeeeeee;
 
     callback();
   }
